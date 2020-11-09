@@ -23,5 +23,4 @@ gen:
 		api/*/*.proto
 
 clean-proto:
-	rm api/helloworld/*.go
-	rm api/basic/*.go
+	rm api/*/*.go
