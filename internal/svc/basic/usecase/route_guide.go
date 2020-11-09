@@ -5,11 +5,12 @@ import (
 	"fmt"
 
 	"github.com/captain-corgi/grpc-go-example/api/routeguide"
+	pb "github.com/captain-corgi/grpc-go-example/api/routeguide"
 )
 
 //RouteGuideServer implement API RouteGuide
 type RouteGuideServer struct {
-	routeguide.UnimplementedRouteGuideServer
+	pb.UnimplementedRouteGuideServer
 }
 
 //NewRouteGuideServer return new RouteGuide server
@@ -18,9 +19,9 @@ func NewRouteGuideServer() *RouteGuideServer {
 }
 
 //GetFeature return feature of selected point
-func (r *RouteGuideServer) GetFeature(ctx context.Context, p *routeguide.Point) (*routeguide.Feature, error) {
+func (r *RouteGuideServer) GetFeature(ctx context.Context, p *pb.Point) (*routeguide.Feature, error) {
 	fmt.Printf("Received %+v\n", p)
-	return &routeguide.Feature{
+	return &pb.Feature{
 		Name:     "Dummy feature",
 		Location: p,
 	}, nil

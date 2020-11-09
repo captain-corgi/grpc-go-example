@@ -6,8 +6,9 @@ import (
 	"log"
 	"net"
 
-	"github.com/captain-corgi/grpc-go-example/api/routeguide"
+	pb "github.com/captain-corgi/grpc-go-example/api/routeguide"
 	"github.com/captain-corgi/grpc-go-example/internal/svc/basic/usecase"
+
 	"google.golang.org/grpc"
 )
 
@@ -25,7 +26,7 @@ func Bootstrap() {
 	sv := grpc.NewServer()
 
 	// Register service
-	routeguide.RegisterRouteGuideServer(sv, usecase.NewRouteGuideServer())
+	pb.RegisterRouteGuideServer(sv, usecase.NewRouteGuideServer())
 
 	// Start server
 	log.Printf("Server started in port %d\n", *port)
