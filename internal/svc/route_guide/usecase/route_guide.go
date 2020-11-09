@@ -8,6 +8,8 @@ import (
 
 	"github.com/captain-corgi/grpc-go-example/api/routeguide"
 	pb "github.com/captain-corgi/grpc-go-example/api/routeguide"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -36,6 +38,21 @@ func (r *RouteGuideServer) GetFeature(ctx context.Context, p *pb.Point) (*routeg
 	}
 	// No feature was found, return an unnamed feature
 	return &pb.Feature{Name: "", Location: p}, nil
+}
+
+//ListFeatures list all features
+func (r *RouteGuideServer) ListFeatures(rectangle *pb.Rectangle, sv pb.RouteGuide_ListFeaturesServer) error {
+	return status.Errorf(codes.Unimplemented, "method ListFeatures not implemented")
+}
+
+//RecordRoute add route for feature
+func (r *RouteGuideServer) RecordRoute(sv pb.RouteGuide_RecordRouteServer) error {
+	return status.Errorf(codes.Unimplemented, "method RecordRoute not implemented")
+}
+
+//RouteChat send and receive message
+func (r *RouteGuideServer) RouteChat(sv pb.RouteGuide_RouteChatServer) error {
+	return status.Errorf(codes.Unimplemented, "method RouteChat not implemented")
 }
 
 // loadFeatures loads features from a JSON file.

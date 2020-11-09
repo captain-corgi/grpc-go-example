@@ -1,4 +1,4 @@
-package basic
+package routeguide
 
 import (
 	"flag"
@@ -7,7 +7,7 @@ import (
 	"net"
 
 	pb "github.com/captain-corgi/grpc-go-example/api/routeguide"
-	"github.com/captain-corgi/grpc-go-example/internal/svc/basic/usecase"
+	"github.com/captain-corgi/grpc-go-example/internal/svc/route_guide/usecase"
 
 	"google.golang.org/grpc"
 )

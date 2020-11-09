@@ -1,8 +1,9 @@
 package main
 
-import "github.com/captain-corgi/grpc-go-example/internal/svc/basic"
+import (
+	"github.com/captain-corgi/grpc-go-example/internal"
+)
 
 func main() {
-	//Start basic service
-	basic.Bootstrap()
+	internal.StartServices()
 }
