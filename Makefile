@@ -15,6 +15,14 @@ tidy:
 
 gen:
 	protoc -I . \
-	--go_out=. --go_opt=paths=source_relative \
-    --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-    api/proto/helloworld/*.proto
+		--go_out=. --go_opt=paths=source_relative \
+		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
+		api/helloworld/*.proto
+	protoc -I . \
+		--go_out=. --go_opt=paths=source_relative \
+		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
+		api/basic/*.proto
+
+clean-proto:
+	rm api/helloworld/*.go
+	rm api/basic/*.go
