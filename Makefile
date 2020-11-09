@@ -1,8 +1,11 @@
 run-server:
 	go run cmd/server/main.go
-
 run-client:
 	go run cmd/client/main.go
+run-basic:
+	go run cmd/basic/main.go
+run-basic-client:
+	go run cmd/basic-client/main.go
 
 tidy:
 	go mod tidy
@@ -17,11 +20,7 @@ gen:
 	protoc -I . \
 		--go_out=. --go_opt=paths=source_relative \
 		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
-		api/helloworld/*.proto
-	protoc -I . \
-		--go_out=. --go_opt=paths=source_relative \
-		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
-		api/basic/*.proto
+		api/*/*.proto
 
 clean-proto:
 	rm api/helloworld/*.go
