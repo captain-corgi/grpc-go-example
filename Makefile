@@ -8,6 +8,8 @@ run-basic-gateway:
 	go run cmd/gateway/main.go
 run-basic-client:
 	go run cmd/basic-client/main.go
+run-uam:
+	go run cmd/uam/main.go
 
 tidy:
 	go mod tidy
