@@ -30,8 +30,8 @@ gen:
 		--go_out=. --go_opt=paths=source_relative \
 		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
 		--grpc-gateway_out=api/user/ \
-		--openapiv2_out=api/user/swagger \
-		api/user/*.proto
+		--openapiv2_out=./ \
+		api/*/*.proto
 
 clean-proto:
 	rm api/*/*.go

@@ -2,9 +2,11 @@ package svc
 
 import (
 	"context"
+	"flag"
 	"log"
 	"net"
 	"net/http"
+	"path"
 	"strings"
 
 	"github.com/golang/glog"
@@ -13,6 +15,10 @@ import (
 
 	routeGuideService "github.com/captain-corgi/grpc-go-example/internal/svc/route_guide"
 	userService "github.com/captain-corgi/grpc-go-example/internal/svc/user"
+)
+
+var (
+	swaggerDir = flag.String("swagger_dir", "/api", "path to the directory which contains swagger definitions")
 )
 
 //StartServices run all services
@@ -34,7 +40,7 @@ func StartServices(grpcEndpoint string) {
 }
 
 //StartGateway run all gRPC gateways
-func StartGateway(rpcPort string, grpcEndpoint string) {
+func StartGateway(rpcPort string, grpcEndpoint string, opts ...runtime.ServeMuxOption) {
 	defer glog.Flush()
 
 	// Initial context
@@ -42,16 +48,23 @@ func StartGateway(rpcPort string, grpcEndpoint string) {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
+	// Create runtime server mux
+	mux := runtime.NewServeMux(opts...)
+	dialOpts := []grpc.DialOption{grpc.WithInsecure()}
+
 	// Register gRPC server endpoint
 	// Note: Make sure the gRPC server is running properly and accessible
-	mux := runtime.NewServeMux()
-	opts := []grpc.DialOption{grpc.WithInsecure()}
-	userService.RegisterGateway(ctx, mux, grpcEndpoint, opts)
+	userService.RegisterGateway(ctx, mux, grpcEndpoint, dialOpts)
+
+	// Create http server mux to handle independent http function
+	httpMux := http.NewServeMux()
+	httpMux.Handle("/", mux)
+	httpMux.HandleFunc("/v1/swagger/", serveSwagger)
 
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
 	log.Printf("GRPC server started on port %s\n", grpcEndpoint)
 	log.Printf("HTTP server listening on port %s\n", rpcPort)
-	glog.Fatal(http.ListenAndServe(rpcPort, allowCORS(mux)))
+	log.Fatal(http.ListenAndServe(rpcPort, allowCORS(httpMux)))
 }
 
 func preflightHandler(w http.ResponseWriter, r *http.Request) {
@@ -76,4 +89,18 @@ func allowCORS(h http.Handler) http.Handler {
 		}
 		h.ServeHTTP(w, r)
 	})
+}
+
+// TODO: Not working yet.....
+func serveSwagger(w http.ResponseWriter, r *http.Request) {
+	if !strings.HasSuffix(r.URL.Path, ".swagger.json") {
+		glog.Errorf("Swagger JSON not Found: %s", r.URL.Path)
+		http.NotFound(w, r)
+		return
+	}
+
+	glog.Infof("Serving %s", r.URL.Path)
+	p := strings.TrimPrefix(r.URL.Path, "/v1/swagger/")
+	p = path.Join(*swaggerDir, p)
+	http.ServeFile(w, r, p)
 }

@@ -4,7 +4,6 @@
     "title": "api/user/user.proto",
     "version": "version not set"
   },
-  "host": "localhost:8180",
   "consumes": [
     "application/json"
   ],
