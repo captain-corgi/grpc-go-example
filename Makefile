@@ -22,5 +22,14 @@ gen:
 		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
 		api/*/*.proto
 
+	protoc -I . \
+		--go_out=. --go_opt=paths=source_relative \
+		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
+		--grpc-gateway_out=api/user/ \
+		--openapiv2_out=api/user/swagger \
+		api/user/*.proto
+
 clean-proto:
 	rm api/*/*.go
+clean-swagger:
+	rm -r api/*/swagger/*
