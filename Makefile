@@ -4,6 +4,8 @@ run-client:
 	go run cmd/client/main.go
 run-basic:
 	go run cmd/basic/main.go
+run-basic-gateway:
+	go run cmd/gateway/main.go
 run-basic-client:
 	go run cmd/basic-client/main.go
 
