@@ -1,0 +1,114 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api/routeguide/route_guide.proto",
+    "version": "version not set"
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {},
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "typeUrl": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "routeguideFeature": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the feature."
+        },
+        "location": {
+          "$ref": "#/definitions/routeguidePoint",
+          "description": "The point where the feature is detected."
+        }
+      },
+      "description": "A feature names something at a given point.\n\nIf a feature could not be named, the name is empty."
+    },
+    "routeguidePoint": {
+      "type": "object",
+      "properties": {
+        "latitude": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "longitude": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "description": "Points are represented as latitude-longitude pairs in the E7 representation\n(degrees multiplied by 10**7 and rounded to the nearest integer).\nLatitudes should be in the range +/- 90 degrees and longitude should be in\nthe range +/- 180 degrees (inclusive)."
+    },
+    "routeguideRouteNote": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "$ref": "#/definitions/routeguidePoint",
+          "description": "The location from which the message is sent."
+        },
+        "message": {
+          "type": "string",
+          "description": "The message to be sent."
+        }
+      },
+      "description": "A RouteNote is a message sent while at a given point."
+    },
+    "routeguideRouteSummary": {
+      "type": "object",
+      "properties": {
+        "pointCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number of points received."
+        },
+        "featureCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number of known features passed while traversing the route."
+        },
+        "distance": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The distance covered in metres."
+        },
+        "elapsedTime": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The duration of the traversal in seconds."
+        }
+      },
+      "description": "A RouteSummary is received in response to a RecordRoute rpc.\n\nIt contains the number of individual points received, the number of\ndetected features, and the total distance covered as the cumulative sum of\nthe distance between each point."
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

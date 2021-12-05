@@ -3,6 +3,7 @@ package svc
 import (
 	"context"
 	"flag"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -18,7 +19,7 @@ import (
 )
 
 var (
-	swaggerDir = flag.String("swagger_dir", "/api", "path to the directory which contains swagger definitions")
+	swaggerDir = flag.String("swagger_dir", "../../api/swagger", "path to the directory which contains swagger definitions")
 )
 
 //StartServices run all services
@@ -59,6 +60,7 @@ func StartGateway(rpcPort string, grpcEndpoint string, opts ...runtime.ServeMuxO
 	// Create http server mux to handle independent http function
 	httpMux := http.NewServeMux()
 	httpMux.Handle("/", mux)
+	httpMux.HandleFunc("/health", health)
 	httpMux.HandleFunc("/v1/swagger/", serveSwagger)
 
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
@@ -73,7 +75,6 @@ func preflightHandler(w http.ResponseWriter, r *http.Request) {
 	methods := []string{"GET", "HEAD", "POST", "PUT", "DELETE"}
 	w.Header().Set("Access-Control-Allow-Methods", strings.Join(methods, ","))
 	glog.Infof("preflight request for %s", r.URL.Path)
-	return
 }
 
 // allowCORS allows Cross Origin Resoruce Sharing from any origin.
@@ -91,14 +92,11 @@ func allowCORS(h http.Handler) http.Handler {
 	})
 }
 
-// TODO: Not working yet.....
-func serveSwagger(w http.ResponseWriter, r *http.Request) {
-	if !strings.HasSuffix(r.URL.Path, ".swagger.json") {
-		glog.Errorf("Swagger JSON not Found: %s", r.URL.Path)
-		http.NotFound(w, r)
-		return
-	}
+func health(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "OK")
+}
 
+func serveSwagger(w http.ResponseWriter, r *http.Request) {
 	glog.Infof("Serving %s", r.URL.Path)
 	p := strings.TrimPrefix(r.URL.Path, "/v1/swagger/")
 	p = path.Join(*swaggerDir, p)
