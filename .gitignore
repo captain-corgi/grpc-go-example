@@ -1,2 +1,5 @@
 vendor
 .vscode
+/.idea/grpc-go-example.iml
+/.idea/modules.xml
+/.idea/vcs.xml
