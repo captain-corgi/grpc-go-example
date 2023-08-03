@@ -22,11 +22,13 @@ tidy:
 
 gen:
 	protoc -I . \
+		--proto_path third_party/ \
 		--go_out=. --go_opt=paths=source_relative \
 		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
 		api/*/*.proto
 
 	protoc -I . \
+		--proto_path third_party/ \
 		--go_out=. --go_opt=paths=source_relative \
 		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
 		--grpc-gateway_out=api/user/ \
